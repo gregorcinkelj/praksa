@@ -66,7 +66,7 @@ nano deploy.conf
 
 Vanjo vnesemo:
 
-HTML_CONTENT="<html><body><h1>Hello World</h1></body></html>"
+#HTML_CONTENT="<html><body><h1>Hello World</h1></body></html>"
 
 (vsebina strani se shrani v spremenljivko HTML_CONTENT)
 
