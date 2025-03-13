@@ -6,6 +6,12 @@ datoteke kot so nginx.crt in nginx.key gredo v certs.
 datoteka default.conf gre v conf.d
 
 
+
+
+
+
+
+
 Navodila za namestitev in zagon Nginx s podporo za SSL v Dockerju
 
 Posodobitev repozitorijev v Ubuntu
