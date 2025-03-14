@@ -22,6 +22,22 @@ sudo apt update
 
 (s tem zagotovimo, da so vsi paketi posodobljeni)
 
+Naredimo docker apt repository
+
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
 Namestitev Docker Engine
 
 Namestimo Docker Engine in potrebne dodatke:
@@ -39,6 +55,10 @@ Ustvarjanje direktorija za projekt
 Ko imamo nameščen Docker Engine, ustvarimo direktorij, kjer bomo shranili naše datoteke:
 
 mkdir docker
+
+gremo v naš directory ki smo ga naredili
+
+cd docker
 
 Nato odpremo datoteko docker-compose.yaml v urejevalniku nano:
 
@@ -66,7 +86,7 @@ nano deploy.conf
 
 Vanjo vnesemo:
 
-#HTML_CONTENT="<html><body><h1>Hello World</h1></body></html>"
+HTML_CONTENT="<html><body><h1>Hello World</h1></body></html>"
 
 (vsebina strani se shrani v spremenljivko HTML_CONTENT)
 
@@ -138,6 +158,10 @@ echo "$HTML_CONTENT" > html/index.html
 sudo docker compose up
 
 Shrani in zapri nano.
+
+naštimamo da se skripta lahko zažene
+
+chmod +x ./deploy.sh
 
 Zagon skripte
 
