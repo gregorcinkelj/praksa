@@ -86,7 +86,7 @@
     - name: Generate SSL certificates (self-signed for testing) for Ubuntu
       command: >
         openssl req -x509 -newkey rsa:4096 -keyout /home/xlab/docker/certs/nginx.key -out /home/xlab/docker/certs/nginx.crt -days 365 -nodes
-        -subj "/C=SI/ST=Central/L=Ljubljana/O=Organization/CN=Gregor/emailAddress=g.cinkelj@gmail.com"
+        -subj "/C=SI/ST=Central/L=Ljubljana/O=Organization/CN=Gregor"
       args:
         creates: /home/xlab/docker/certs/nginx.crt
       when: "'ubuntu' in group_names"
@@ -198,7 +198,7 @@
     - name: Generate SSL certificates (self-signed for testing) for redhat
       command: >
         openssl req -x509 -newkey rsa:4096 -keyout /home/xlab/docker/certs/nginx.key -out /home/xlab/docker/certs/nginx.crt -days 365 -nodes
-        -subj "/C=SI/ST=Central/L=Ljubljana/O=Organization/CN=Gregor/emailAddress=g.cinkelj@gmail.com"
+        -subj "/C=SI/ST=Central/L=Ljubljana/O=Organization/CN=Gregor"
       args:
         creates: /home/xlab/docker/certs/nginx.crt
       when: "'redhat' in group_names"
