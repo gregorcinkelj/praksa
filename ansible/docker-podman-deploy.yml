@@ -55,7 +55,7 @@
 
     - name: Copy default .conf to the nginx server
       copy:
-        src: ./conf.d/default.conf
+        src: ./default.conf
         dest: /home/xlab/docker/conf.d/default.conf
         owner: xlab
         group: xlab
