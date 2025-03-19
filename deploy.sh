@@ -3,4 +3,4 @@
 # Make sure we're in the correct directory (where the script is located)
 cd "$(dirname "$0")"
 
-ansible-playbook -i ansible-inventory.ini ansible/docker-podman-deploy.yml
+ansible-playbook -i ansible/inventory.ini ansible/docker-podman-deploy.yml
