@@ -1,0 +1,8 @@
+ssl_cert_path: "/home/xlab/docker/certs/nginx.crt"
+ssl_key_path: "/home/xlab/docker/certs/nginx.key"
+country: "SI"
+state: "Central"
+locality: "Ljubljana"
+organization: "Organization"
+common_name: "Gregor"
+days_valid: 365

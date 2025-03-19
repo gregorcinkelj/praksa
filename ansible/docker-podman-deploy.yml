@@ -1,0 +1,154 @@
+---
+- name: Setup Nginx with Docker/Podman
+  hosts: all
+  gather_facts: yes
+  vars_files:
+    - index.yaml
+    - certs.yaml
+
+  become: yes
+
+  tasks:
+    - name: Create deployment directory
+      file:
+        path: /home/xlab/docker
+        state: directory
+        owner: xlab
+        group: xlab
+        mode: '0755'
+
+    - name: Create required directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: xlab
+        group: xlab
+        mode: '0775'
+      loop:
+        - /home/xlab/docker/html
+        - /home/xlab/docker/certs
+        - /home/xlab/docker/conf.d
+
+    - name: Ensure /home/xlab/docker/html directory is writable
+      file:
+        path: /home/xlab/docker/html
+        mode: '0775'
+        recurse: yes
+
+    - name: Create index.html file
+      copy:
+        dest: /home/xlab/docker/html/index.html
+        content: "{{ index_html }}"
+        owner: xlab
+        group: xlab
+        mode: '0644'
+
+    - name: Generate SSL certificates (self-signed for testing)
+      command: >
+        openssl req -x509 -newkey rsa:4096
+        -keyout {{ ssl_key_path }}
+        -out {{ ssl_cert_path }}
+        -days {{ days_valid }} -nodes
+        -subj "/C={{ country }}/ST={{ state }}/L={{ locality }}/O={{ organization }}/CN={{ common_name }}"
+      args:
+        creates: "{{ ssl_cert_path }}"
+
+    - name: Copy default .conf to the nginx server
+      copy:
+        src: ./conf.d/default.conf
+        dest: /home/xlab/docker/conf.d/default.conf
+        owner: xlab
+        group: xlab
+        mode: '0644'
+
+    # Install Docker on Ubuntu
+    - name: Update package lists (Debian)
+      apt:
+        update_cache: yes
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Install required packages (Debian)
+      apt:
+        name:
+          - ca-certificates
+          - curl
+        state: present
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Create keyrings directory (Debian)
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Download Docker's GPG key (Debian)
+      get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Add Docker repository (Debian)
+      shell: |
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+      args:
+        creates: /etc/apt/sources.list.d/docker.list
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Update package lists again (Debian)
+      apt:
+        update_cache: yes
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Install Docker packages (Debian)
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: latest
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Generate docker-compose.yml
+      template:
+        src: docker-compose.yml.j2
+        dest: /home/xlab/docker/docker-compose.yml
+        owner: xlab
+        group: xlab
+        mode: '0644'
+
+    - name: Run Docker Compose (Debian)
+      command: docker compose up -d
+      args:
+        chdir: /home/xlab/docker
+      when: ansible_distribution_file_variety == "Debian"
+
+      # Install pip3 (RedHat)
+    - name: Install pip3 (RedHat)
+      dnf:
+        name: python3-pip
+        state: latest
+      when: ansible_distribution_file_variety == "RedHat"
+
+    # Install Podman on RedHat
+    - name: Install Podman (Redhat)
+      dnf:
+        name: podman
+        state: latest
+      when: ansible_distribution_file_variety == "RedHat"
+
+    - name: Install Podman Compose (Redhat)
+      pip:
+        name: podman-compose
+        state: latest
+      when: ansible_distribution_file_variety == "RedHat"
+
+    - name: Run Podman Compose (Redhat)
+      command: /usr/local/bin/podman-compose up -d
+      args:
+        chdir: /home/xlab/docker  # This changes the directory before executing the command
+      when: ansible_distribution_file_variety == "RedHat"
+
