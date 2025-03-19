@@ -9,3 +9,4 @@ services:
       - ./html:/usr/share/nginx/html
       - ./conf.d:/etc/nginx/conf.d
       - ./certs:/etc/nginx/certs
+    restart: always
