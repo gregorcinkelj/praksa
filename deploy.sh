@@ -1,14 +1,6 @@
 #!/bin/bash
 
-# Naloži spremenljivke iz deploy.conf
-source deploy.conf
+# Make sure we're in the correct directory (where the script is located)
+cd "$(dirname "$0")"
 
-#make new directory incase there is no directory
-[ -d html ] || mkdir html
-
-#writes info  into index.html
-echo "$HTML_CONTENT" > html/index.html
-
-
-#runs docker compose
-sudo docker compose up
+ansible-playbook -i ansible-inventory.ini ansible/docker-podman-deploy.yml
