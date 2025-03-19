@@ -11,4 +11,4 @@ echo "$HTML_CONTENT" > html/index.html
 
 
 #runs docker compose
-sudo docker compose up
+sudo docker compose -f /ansible/docker-compose.yml up -d
