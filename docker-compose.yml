@@ -1,0 +1,11 @@
+services:
+  proxy:
+    image: docker.io/library/nginx:latest  # Podman requires full image path
+    container_name: nginx_test
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - ./conf.d:/etc/nginx/conf.d
+      - ./certs:/etc/nginx/certs
