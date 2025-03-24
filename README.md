@@ -23,10 +23,14 @@ git clone git@github.com:gregorcinkelj/praksa.git
 cd praksa
 
 # kaj naj zdaj naredim?
-# nekaj od spodnjega, verjetno
-docker compose up
-./deploy.sh deploy.conf
+#naredi deploy.sh executible
+chmod +x deploy.sh
+
+#run the deploy.sh
+./deploy.sh
 ```
+
+
 
 Test if nginx works.
 Open link http://localhost or https://localhost.
