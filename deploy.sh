@@ -19,4 +19,4 @@ echo "$HTML_CONTENT" > html/index.html
 
 
 #runs docker compose
-sudo docker compose docker-compose.yml up -d
+sudo docker compose up -d
