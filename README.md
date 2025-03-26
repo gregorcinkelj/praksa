@@ -2,44 +2,55 @@
 
 ## Namesti docker
 
+Za namestitev Dockerja zaženite naslednje ukaze:
+
 ```bash
 curl https://get.docker.com | sudo bash -
 sudo usermod -aG docker $USER
-# odjava, prijava nujno da se skupina osveži
-groups  # tole mora it v skupino
+
+#Pomembno: Odjavite se in ponovno prijavite, da se spremembe skupine uveljavijo.
+
+#Preverite, ali je uporabnik v skupini docker:
+
+groups  # Izhod mora vsebovati "docker"
 ```
 
-testiranje če docker dela
+## Testiranje Dockerja
+Preverite, ali Docker deluje:
 
 ```bash
 sudo docker run hello-world
 docker run hello-world
 ```
 
-## Pozeni docker compose
+## Zagon Docker Compose
+Klonirajte repozitorij in vstopite v mapo projekta:
 
 ```bash
 git clone git@github.com:gregorcinkelj/praksa.git
 cd praksa
 
-# kaj naj zdaj naredim?
-#naredi deploy.sh executible
+#Nastavitev dovoljenj in zagon
+#Naredite deploy.sh izvršljivo:
+
 chmod +x deploy.sh
 
 #zaženi deploy.sh
 ./deploy.sh
 ```
 
+## Testiranje, ali Nginx deluje
+Odprite povezavo v brskalniku:
+- HTTP: http://localhost 
+- HTTPS: https://localhost.
 
-
-Testiranje če nginx works.
-odpri povezavo http://localhost ali https://localhost.
-ali zaženem
+Ali preverite s curl:
 
 ```bash
 curl http://localhost
 curl -k https://localhost
 ```
 
-če to dela, potem kode dela.
-Nato lahko poizkusim prilagoditi vsebino HTML-ja itd.
+Če dobite odgovor, potem koda deluje. Nato lahko prilagodite HTML-vsebino po potrebi.
+
+
