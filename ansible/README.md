@@ -1,53 +1,52 @@
 
-# povezave do ansible pomoc
+# Povezave do Ansible pomoči
 https://www.redhat.com/en/blog/quadlet-podman
 
 https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_container_module.html
 
 ## 1. Namestitev Ansible v Ubuntu
 
-Odpremo terminal in vnesemo.
+Odprite terminal in vnesite:
 
 ```bash
 sudo apt-add-repository ppa:ansible/ansible
 ```
 
-Osvežimo sistemske pakete, da ve da so nove pakete dodane v ppa:.
+Osvežite sistemske pakete, da bo sistem zaznal nove pakete v PPA:
 
 ```bash
 sudo apt update
 ```
 
-Namestitev ansible vnesemo.
+Za namestitev Ansible vnesite:
 ```bash
 sudo apt install ansible
 ```
 
-## 2. Postaviti inventory datoteke
-
-lahko uporabimo orginal lokacijo 
+## 2. Postavitev inventory datoteke
+Uporabite lahko privzeto lokacijo:
 
 ```bash
 sudo nano /etc/ansible/hosts
 ```
 
-ali pa naredimo svojo in uporabite svojo ime od uporabnika
+ali pa ustvarite svojo datoteko v domači mapi:
 
 ```bash
 sudo nano /home/user/ansible/inventory.ini
 ```
 
-v nano napišemo lahko brez skupine ali s skupini
-zmeraj uporabi ta ip address na kateri so te računalniki/cloud/virtual
+V urejevalnik nano lahko vnesete strežnike brez skupine ali z njo.
+Vedno uporabite ustrezne IP-naslove računalnikov, oblaka ali virtualnih strojev.
 
-brez skupine
+Brez skupine:
 ```bash
 203.0.113.111
 203.0.113.112
 203.0.113.113
 ```
 
-s skupino
+S skupino:
 
 ```bash
 [servers]
@@ -59,31 +58,34 @@ s skupino
 
 ## 3. Testiranje povezave
 
-ko smo postavili inventory. iz lokalne zaženemo
+Ko je inventory nastavljen, iz lokalnega sistema zaženite:
 
 ```bash
 ansible all -m ping -u xlab
 ```
 
-to bo testiral: 
-- če host ji lahko dobi
-- če so taprave SSH credentials
-- če host lahko zažene ansible module ki uporablja python
+To bo preverilo:
 
-## 4. Obvezno
+- ali so strežniki dosegljivi,
 
-Preden zaženemo moj playbook moramo namestiti
+- ali so poverilnice za SSH pravilne,
+
+- ali lahko Ansible izvaja module na strežnikih (Python mora biti nameščen).
+
+## 4. Obvezna namestitev dodatkov
+
+Pred zagonom playbook-a je treba namestiti naslednje collections:
 
 ```bash
 ansible-galaxy collection install containers.podman
 
 ansible-galaxy collection install community.docker
 ```
-brez tega playbook module ne bo delovalo
+Brez tega playbook ne bo deloval.
 
 
-## 5. Zagoni playbook
-če bi želeli zaženiti moj playbook. ampak pazite na ime ki ga boste dali v playbook in inventory. v mojem primeru je so v playbook in inventory ansible_user=xlab
+## 5. Zagoni playbook-a
+Za zagon playbook-a uporabite naslednji ukaz. Pazite, da se ime uporabnika ujema v playbook-u in inventory. V tem primeru je ansible_user=xlab.
 
 ```bash
 ansible-playbook -i ansible/inventory ansible/docker-podman-deploy.yml
