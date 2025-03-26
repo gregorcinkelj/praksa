@@ -95,34 +95,18 @@
         chdir: /home/xlab/docker
       when: ansible_distribution == "Ubuntu"
 
-    - name: Set correct SELinux context for nginx html directory
-      command: chcon -R -t httpd_sys_content_t /home/xlab/docker/html
-      when: ansible_distribution_file_variety == "RedHat"
-
     - name: Install Podman and dependencies (RedHat)
       dnf:
         name:
-          - python3-pip
           - podman
         state: latest
       when: ansible_distribution_file_variety == "RedHat"
 
-    - name: Enable podman.socket and podman service to start on boot (RedHat)
-      systemd:
-        name: "{{ item }}"
-        enabled: yes
-        state: started
-      loop:
-        - podman.socket
-        - podman
-      when: ansible_distribution_file_variety == "RedHat"
-
-    - name: Create Podman container for Nginx (HTTP + HTTPS)
+    - name: Create a Quadlet file
       containers.podman.podman_container:
-        name: nginx_test
+        name: nginx-test
         image: docker.io/library/nginx:latest
-        state: started
-        restart_policy: always
+        state: quadlet
         ports:
           - "80:80"
           - "443:443"
@@ -130,24 +114,12 @@
           - "/home/xlab/docker/html:/usr/share/nginx/html:Z"
           - "/home/xlab/docker/certs:/etc/nginx/certs:Z"
           - "/home/xlab/docker/conf.d:/etc/nginx/conf.d:Z"
-      when: ansible_distribution_file_variety == "RedHat"
-
-    - name: Create custom systemd service for nginx_test container (RedHat)
-      copy:
-        dest: /etc/systemd/system/container-nginx_test.service
-        content: |
-          [Unit]
-          Description=Podman container for nginx_test
-          After=network.target
-
-          [Service]
-          ExecStart=/usr/bin/podman start -a nginx_test
-          ExecStop=/usr/bin/podman stop -t 10 nginx_test
-          Restart=on-failure
-          RestartSec=10
-
-          [Install]
-          WantedBy=multi-user.target
+        quadlet_options:
+          - "AutoUpdate=registry"
+          - "Pull=newer"
+          - |
+            [Install]
+            WantedBy=default.target
       when: ansible_distribution_file_variety == "RedHat"
 
     - name: Reload systemd daemon (RedHat)
@@ -155,19 +127,9 @@
         daemon_reload: yes
       when: ansible_distribution_file_variety == "RedHat"
 
-    - name: Enable and start nginx_test service (RedHat)
+    - name: Enable and start nginx-test service (RedHat)
       systemd:
-        name: container-nginx_test.service
+        name: nginx-test
         enabled: yes
         state: started
       when: ansible_distribution_file_variety == "RedHat"
-
-    - name: Check if the index.html file is in the container
-      command: podman exec nginx_test ls -l /usr/share/nginx/html/index.html
-      register: index_check
-      ignore_errors: yes
-      when: ansible_distribution_file_variety == "RedHat"
-
-    - name: Debug index.html mount
-      debug:
-        var: index_check
