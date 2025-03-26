@@ -23,7 +23,7 @@ Namestitev ansible vnesemo.
 sudo apt install ansible
 ```
 
-## 2. postaviti inventory datoteke
+## 2. Postaviti inventory datoteke
 
 lahko uporabimo orginal lokacijo 
 
@@ -57,12 +57,12 @@ s skupino
 ```
 
 
-## 3. testiranje povezave
+## 3. Testiranje povezave
 
 ko smo postavili inventory. iz lokalne zaženemo
 
 ```bash
-ansible all -m ping -u root
+ansible all -m ping -u xlab
 ```
 
 to bo testiral: 
@@ -70,18 +70,19 @@ to bo testiral:
 - če so taprave SSH credentials
 - če host lahko zažene ansible module ki uporablja python
 
-## 4. obvezno
+## 4. Obvezno
 
-Preden zazenemo moj playbook moramo namestiti
+Preden zaženemo moj playbook moramo namestiti
 
 ```bash
 ansible-galaxy collection install containers.podman
 
 ansible-galaxy collection install community.docker
 ```
+brez tega playbook module ne bo delovalo
 
 
-## 5. zagoni playbook
+## 5. Zagoni playbook
 če bi želeli zaženiti moj playbook. ampak pazite na ime ki ga boste dali v playbook in inventory. v mojem primeru je so v playbook in inventory ansible_user=xlab
 
 ```bash
