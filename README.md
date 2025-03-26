@@ -5,11 +5,11 @@
 ```bash
 curl https://get.docker.com | sudo bash -
 sudo usermod -aG docker $USER
-# logout, login needed, to reload group membership
-groups  # this needs to list also docker group
+# odjava, prijava nujno da se skupina osveži
+groups  # tole mora it v skupino
 ```
 
-Test if docker works
+testiranje če docker dela
 
 ```bash
 sudo docker run hello-world
@@ -26,20 +26,20 @@ cd praksa
 #naredi deploy.sh executible
 chmod +x deploy.sh
 
-#run the deploy.sh
+#zaženi deploy.sh
 ./deploy.sh
 ```
 
 
 
-Test if nginx works.
-Open link http://localhost or https://localhost.
-Or run
+Testiranje če nginx works.
+odpri povezavo http://localhost ali https://localhost.
+ali zaženem
 
 ```bash
 curl http://localhost
 curl -k https://localhost
 ```
 
-Ce to dela, potem kode dela.
+če to dela, potem kode dela.
 Nato lahko poizkusim prilagoditi vsebino HTML-ja itd.
