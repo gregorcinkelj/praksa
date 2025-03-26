@@ -85,14 +85,14 @@
     - name: Update package lists again (Ubuntu)
       apt:
         update_cache: yes
-      when: ansible_distribution == "Ubuntu"      
+      when: ansible_distribution == "Ubuntu"
 
     - name: Install required packages (Debian)
       apt:
         name:
           - ca-certificates
           - curl
-        state: present
+        state: latest
       when: ansible_distribution == "Ubuntu"
 
     - name: Install Docker packages (Ubuntu)
@@ -106,19 +106,19 @@
         state: latest
       when: ansible_distribution == "Ubuntu"
 
-    - name: Generate docker-compose.yml
-      template:
-        src: ../docker-compose.yml
-        dest: /home/xlab/docker/docker-compose.yml
-        owner: xlab
-        group: xlab
-        mode: '0644'
-      when: ansible_distribution == "Ubuntu"
-
-    - name: Run Docker Compose (Ubuntu)
-      command: docker compose up -d
-      args:
-        chdir: /home/xlab/docker
+    - name: Deploy Nginx container
+      community.docker.docker_container:
+        name: nginx-test
+        image: docker.io/library/nginx:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
+          - "443:443"
+        volumes:
+          - "/home/xlab/docker/html:/usr/share/nginx/html"
+          - "/home/xlab/docker/conf.d:/etc/nginx/conf.d"
+          - "/home/xlab/docker/certs:/etc/nginx/certs"
       when: ansible_distribution == "Ubuntu"
 
     - name: Install Podman and dependencies (RedHat)
