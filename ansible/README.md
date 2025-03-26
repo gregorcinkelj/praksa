@@ -1,3 +1,9 @@
+
+# povezave do ansible pomoc
+https://www.redhat.com/en/blog/quadlet-podman
+
+https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_container_module.html
+
 ## 1. Namestitev Ansible v Ubuntu
 
 Odpremo terminal in vnesemo.
@@ -64,8 +70,18 @@ to bo testiral:
 - če so taprave SSH credentials
 - če host lahko zažene ansible module ki uporablja python
 
+## 4. obvezno
 
-## 4. zagoni playbook
+Preden zazenemo moj playbook moramo namestiti
+
+```bash
+ansible-galaxy collection install containers.podman
+
+ansible-galaxy collection install community.docker
+```
+
+
+## 5. zagoni playbook
 če bi želeli zaženiti moj playbook. ampak pazite na ime ki ga boste dali v playbook in inventory. v mojem primeru je so v playbook in inventory ansible_user=xlab
 
 ```bash
