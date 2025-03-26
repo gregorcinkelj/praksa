@@ -4,6 +4,8 @@ https://www.redhat.com/en/blog/quadlet-podman
 
 https://docs.ansible.com/ansible/latest/collections/containers/podman/podman_container_module.html
 
+https://docs.ansible.com/ansible/latest/collections/community/docker/docker_compose_v2_module.html
+
 ## 1. Namestitev Ansible v Ubuntu
 
 Odprite terminal in vnesite:
@@ -77,9 +79,9 @@ To bo preverilo:
 Pred zagonom playbook-a je treba namestiti naslednje collections:
 
 ```bash
-ansible-galaxy collection install containers.podman
+ansible-galaxy collection install containers.podman --force # testirano je bilo na te verziji 1.16.3 --force bo zmeraj namestil najnovejšo verzijo
 
-ansible-galaxy collection install community.docker
+ansible-galaxy collection install community.docker --force # testirano je bilo na te verziji 4.5.2 --force bo zmeraj namestil najnovejšo verzijo
 ```
 Brez tega playbook ne bo deloval.
 
