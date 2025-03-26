@@ -1,7 +1,7 @@
 services:
   proxy:
     image: docker.io/library/nginx:latest  # Podman requires full image path
-    container_name: nginx_test
+    container_name: nginx-test
     ports:
       - "80:80"
       - "443:443"
