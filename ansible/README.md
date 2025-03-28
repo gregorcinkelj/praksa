@@ -90,5 +90,5 @@ Brez tega playbook ne bo deloval.
 Za zagon playbook-a uporabite naslednji ukaz. Pazite, da se ime uporabnika ujema v playbook-u in inventory. V tem primeru je ansible_user=xlab.
 
 ```bash
-ansible-playbook -i ansible/inventory ansible/docker-podman-deploy.yml
+ansible-playbook -i ansible/ansible-inventory ansible/docker-podman-deploy.yml
 ```
